@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Design Blog</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700&family=DM+Sans:wght@300;400&display=swap');
+
+    :root {
+      --bg: #ffffff;
+      --black: #111111;
+      --white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--bg);
+      font-family: 'Oswald', sans-serif;
+      min-height: 100vh;
+      cursor: default;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 28px 36px 0;
+      background: var(--white);
+    }
+
+    .nav-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: fit-content;
+    }
+
+    .site-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      color: var(--black);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-decoration: none;
+      line-height: 1;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .site-name:hover {
+      opacity: 0.75;
+      transition: opacity 0.15s;
+    }
+
+    /* ── DROPDOWN ── */
+    .dropdown-wrap {
+      position: relative;
+      margin-top: 4px;
+      margin-bottom: 12px;
+    }
+
+    .plus-btn {
+      background: none;
+      border: none;
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--black);
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      width: 36px;
+      text-align: left;
+      transition: transform 0.25s ease;
+      font-family: inherit;
+      display: block;
+    }
+
+    .plus-btn.open {
+      transform: rotate(45deg);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: var(--white);
+      min-width: 140px;
+      border-top: 2px solid var(--black);
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .dropdown-menu.open {
+      display: flex;
+    }
+
+    .dropdown-menu a {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      padding: 10px 14px;
+      transition: background 0.15s;
+    }
+
+    .dropdown-menu a:hover {
+      background: rgba(0,0,0,0.06);
+    }
+
+    /* ── PAGES ── */
+    .page {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* ── BLOG PAGE ── */
+    #blog {
+      padding-top: 105px;
+      padding-left: 36px;
+      padding-right: 36px;
+      padding-bottom: 80px;
+    }
+
+    /* ── ENTRY ── */
+    .entry {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .entry-text {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--black);
+      line-height: 1.75;
+      margin-bottom: 36px;
+      letter-spacing: 0.01em;
+      white-space: pre-line;
+    }
+
+    /* ── IMAGE GRID ── */
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .img-thumb {
+      aspect-ratio: 1;
+      overflow: hidden;
+      cursor: zoom-in;
+      background: #e0e0e0;
+    }
+
+    .img-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .img-thumb:hover img {
+      transform: scale(1.04);
+    }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      cursor: zoom-out;
+    }
+
+    #lightbox.open {
+      display: flex;
+    }
+
+    #lightbox img {
+      max-width: 88vw;
+      max-height: 80vh;
+      object-fit: contain;
+      display: block;
+      box-shadow: 0 8px 60px rgba(0,0,0,0.18);
+    }
+
+    #lightbox .lb-caption {
+      background: var(--white);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      padding: 5px 10px;
+      margin-top: 6px;
+      max-width: 88vw;
+      text-align: center;
+      white-space: pre-line;
+    }
+
+    #lightbox .lb-close {
+      position: fixed;
+      top: 24px;
+      right: 30px;
+      font-size: 2rem;
+      color: var(--black);
+      cursor: pointer;
+      font-weight: 300;
+      line-height: 1;
+      z-index: 1001;
+      font-family: sans-serif;
+    }
+
+    @media (max-width: 600px) {
+      .image-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      nav { padding: 20px 20px 0; }
+      #blog { padding-top: 95px; padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="lightbox">
+    <span class="lb-close" id="lb-close">×</span>
+    <img id="lb-img" src="" alt="" />
+    <div class="lb-caption" id="lb-caption"></div>
+  </div>
+
+  <nav>
+    <div class="nav-inner">
+      <a class="site-name" id="nav-title" onclick="goHome()">Eres Lopez</a>
+      <div class="dropdown-wrap">
+        <button class="plus-btn" id="plus-btn" onclick="toggleMenu()">+</button>
+        <div class="dropdown-menu" id="dropdown">
+          <a href="#" onclick="goHome(); return false;">About</a>
+          <a href="#" onclick="goBlog(); return false;">Blog</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page active" id="home"></div>
+
+  <div class="page" id="blog">
+    <div class="entry">
+
+      <p class="entry-text">
+[ENTRY 1 ] Book Design Covers —
+What attracted me overall when researching through covers online/irl is either non-traditional formats and good imagery. I shamefully do judge a book by its cover.
+
+Book 1 is printed on fabric and I think that just brings a more engaging look through and physical satisfaction. The pages all beautifully blend into one another, and have this bold edge. The cover attracted me for the "sacredness" it gives but also how welcoming the fabric makes it.
+Book 2 is this kinda rotten cover insert with the inside sliding it out. I like this format of allowing the reader to fully engage with uncovering the book and immersing themselves in it. The inside unfolds like an accordion, and also has nice translucent pages inside.
+Book 3 is a religious pamphlet with a quiet alluring image and printed on good low-quality paper. The pages felt silky and plastic, but I enjoyed it almost like receipt paper. The image on the cover is what drew me apart from the absurd context, I think it is a satisfying graphic.</p>
+
+      <div class="image-grid" id="image-grid"></div>
+
+    </div>
+  </div>
+
+  <script>
+    const images = [
+      {
+        src: 'book-1.jpg',
+        caption: 'Organised Scenery [15th Edition] — Loh Xiang Yun\nDesign: Loh Xiang Yun (2019)'
+      },
+      {
+        src: 'book-2.jpg',
+        caption: 'Seeing Against Seeing — Alexey Yurenev\nDesign: Teun van der Heijden / the Anti-Krieg-Museum in Berlin'
+      },
+      {
+        src: 'book-3.jpeg',
+        caption: 'Folleto EVC 625. Los 10 Mandamientos siguen de MODA.\nDesign: evc.org.mx'
+      }
+    ];
+
+    const grid = document.getElementById('image-grid');
+    images.forEach((img, i) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'img-thumb';
+      wrap.innerHTML = `<img src="${img.src}" alt="Image ${i+1}" loading="lazy" />`;
+      wrap.addEventListener('click', () => openLightbox(i));
+      grid.appendChild(wrap);
+    });
+
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lb-img');
+    const lbCap = document.getElementById('lb-caption');
+
+    function openLightbox(i) {
+      lbImg.src = images[i].src;
+      lbCap.textContent = images[i].caption;
+      lb.classList.add('open');
+    }
+
+    lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
+    document.getElementById('lb-close').addEventListener('click', closeLightbox);
+    function closeLightbox() { lb.classList.remove('open'); }
+
+    const navTitle = document.getElementById('nav-title');
+    const plusBtn = document.getElementById('plus-btn');
+    const dropdown = document.getElementById('dropdown');
+
+    function goHome() {
+      document.getElementById('home').classList.add('active');
+      document.getElementById('blog').classList.remove('active');
+      navTitle.textContent = 'Eres Lopez';
+      closeMenu();
+    }
+
+    function goBlog() {
+      document.getElementById('blog').classList.add('active');
+      document.getElementById('home').classList.remove('active');
+      navTitle.textContent = 'E';
+      closeMenu();
+    }
+
+    function toggleMenu() {
+      const open = dropdown.classList.toggle('open');
+      plusBtn.classList.toggle('open', open);
+    }
+
+    function closeMenu() {
+      dropdown.classList.remove('open');
+      plusBtn.classList.remove('open');
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dropdown-wrap') && !e.target.closest('.plus-btn')) closeMenu();
+    });
+  </script>
+</body>
+</html>
