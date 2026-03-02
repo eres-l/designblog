@@ -1,5 +1,7 @@
 # designblog
-Design blog for my Principles of Design studio class
+Research Design blog for my Principles of Design studio class
 
-Will upload weekly research assigments and project updates.
+Will upload weekly research assigments and project updates
+
+
 
